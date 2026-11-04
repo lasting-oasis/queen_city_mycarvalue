@@ -12,13 +12,13 @@ Dry-run executed end to end in a scratch workspace; the kit at `tools/merge-kit/
 - QR links are built at runtime from `location.origin + pathname`, so new sheets are right automatically; only printed sheets need the redirect.
 
 ## What the kit does (`merge.sh`)
-Fresh clones → `git filter-repo --to-subdirectory-filter apps/<name>` → merged with history (366 commits) → direct deps pinned from each package-lock → pnpm workspace (`apps/*`, `!apps/explainer`, `packages/*`), Node 22, pnpm 10.17.1 → `tools/build-site.sh` builds one Pages tree (`/micar/`, `/micar/value/`, `/micar/tuner/`, `/micar/garage/`) → `pages.yml` (value tests gate), `ci.yml`, root `render.yaml` (filters `apps/sim/**`, `packages/**`) → value's data workflows at the root with `working-directory: apps/value` and repo-relative paths → `apps/value/assets/explainer` → `apps/explainer`, other assets → `assets/`.
+Fresh clones → `git filter-repo --to-subdirectory-filter apps/<name>` → merged with history (366 commits) → direct deps pinned from each package-lock → pnpm workspace (`apps/*`, `!apps/explainer`, `packages/*`), Node 22, pnpm 10.17.1 → `tools/build-site.sh` builds one Pages tree (`/Micar-com/`, `/Micar-com/value/`, `/Micar-com/tuner/`, `/Micar-com/garage/`) → `pages.yml` (value tests gate), `ci.yml`, root `render.yaml` (filters `apps/sim/**`, `packages/**`) → value's data workflows at the root with `working-directory: apps/value` and repo-relative paths → `apps/value/assets/explainer` → `apps/explainer`, other assets → `assets/`.
 
-Verified: value 102/102 tests; value builds at `/micar/value/`; sim builds and starts with `NODE_ENV=production` via `pnpm --filter @micar/sim start`; tuner loads 244 sprites under `/micar/tuner/`; a real printed `#/c/…` link through the redirect stub lands on the same car with the hash intact.
+Verified: value 102/102 tests; value builds at `/Micar-com/value/`; sim builds and starts with `NODE_ENV=production` via `pnpm --filter @micar/sim start`; tuner loads 244 sprites under `/Micar-com/tuner/`; a real printed `#/c/…` link through the redirect stub lands on the same car with the hash intact.
 
 ## Order
 0. Land PR #1 in car-dealer-sim; pause the three scheduled/self-triggering workflows in queen_city_mycarvalue (`gh workflow disable wayback.yml epa.yml market.yml`).
-1. Run the kit (`bash tools/merge-kit/merge.sh <workdir>`); create empty `lasting-oasis/micar`; push; re-create the 2 secrets + 1 variable; enable Pages (source: GitHub Actions); create the Render service from the root `render.yaml`; verify the new URLs beside the old ones.
+1. Run the kit (`bash tools/merge-kit/merge.sh <workdir>`); create empty `lasting-oasis/Micar-com`; push; re-create the 2 secrets + 1 variable; enable Pages (source: GitHub Actions); create the Render service from the root `render.yaml`; verify the new URLs beside the old ones.
 2. Cutover: redirect stubs (`tools/merge-kit/redirect-stub/`, deployed from a branch) in the two old Pages repos; enable the jobs in the monorepo and trigger each once; switch Render traffic; archive the old repos later. Never rename/delete queen_city_mycarvalue.
 3. Shared packages, golden tests first: `packages/cars` (from the sim), `packages/record` (QR codec + Car type + body styles), `packages/engine`, `packages/i18n`, `packages/brand`; `docs/schema.md` for one Supabase schema.
 
